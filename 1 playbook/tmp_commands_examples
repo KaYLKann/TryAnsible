@@ -1,0 +1,41 @@
+- name: deliver .net frameworks
+  hosts: vm_win_serv_2019
+  #hosts: win_external_test_server
+  gather_facts: no
+  tasks: 
+    #- name: create directory tmp
+    #  win_file:
+    #    path: 'C:\tmp'
+    #    state: directory
+    #- name: copy to windows installer .net framework 4.8
+    #  win_copy: 
+    #    #src: ~/installers/ndp48-devpack-rus.exe /home/vladimir/AnsibleBooks/1 playbook/installers/
+    #    src: /home/vladimir/AnsibleBooks/1 playbook/installers/ndp48-devpack-rus.exe 
+    #    dest: 'C:\tmp\ndp48-devpack-rus.exe'
+    - name: Donwload and install .net framework 4.8
+      win_package:
+        path: http://go.microsoft.com/fwlink/?LinkId=2085167&clcid=0x419
+        #path: 'C:\tmp\ndp48-devpack-rus.exe'
+        product_id: {F12F7131-5C1E-40AC-AF52-07F7CE913AD9}
+        state: present
+        arguments: /q
+      ignore_errors: True
+  
+    - name: Reboot 
+      win_reboot:
+
+    - name: Donwload and install .net core 2.1
+      win_package:
+        path: https://download.visualstudio.microsoft.com/download/pr/a431ea89-07d9-4533-9d72-fd246bd2efc7/5bbc08f02800c08b69bce56d03723f18/dotnet-hosting-2.1.17-win.exe
+        product_id: {2239C6B6-4ADC-4763-8AE1-8C63F6BFBE83}
+        arguments: /quiet
+    
+    - name: Donwload and install .net core 3.1
+      win_package:
+        path: https://download.visualstudio.microsoft.com/download/pr/ff658e5a-c017-4a63-9ffe-e53865963848/15875eef1f0b8e25974846e4a4518135/dotnet-hosting-3.1.3-win.exe
+        product_id: {1A4BD749-610A-4E36-A697-BDED2A6643E3}
+        arguments: /quiet
+    
+    
+  
+      

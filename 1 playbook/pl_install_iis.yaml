@@ -1,0 +1,22 @@
+---
+- name: Install IIS
+  hosts: vm_win_serv_2019
+  #hosts: win_external_test_server
+  gather_facts: no
+  tasks: 
+    - name: Install IIS 
+      win_feature:
+        name: 
+          - Web-Server
+          - Web-Common-Http
+          - Web-Performance
+          - Web-Mgmt-Tools
+          - Web-WHC
+        include_sub_features: yes
+        include_management_tools: yes
+        state: present
+      register: iis_install_state
+    
+    - name: Reboot if installing Web-Server feature requires it
+      win_reboot:
+      when: iis_install_state.reboot_required

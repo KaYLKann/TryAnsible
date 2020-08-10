@@ -1,0 +1,34 @@
+- name: deliver python
+  hosts: vm_win_serv_2019
+  #hosts: win_external_test_server
+  gather_facts: no
+  tasks: 
+    - name: chek power shell version
+      win_shell: python --version 
+      register: shell_result
+      ignore_errors: True
+
+    - name: Process win_shell output
+      debug:
+       msg: "{{ shell_result['stdout'] }}" #{{shell_result.stderr }}
+      when: shell_result['stderr'] == ""
+
+    #- name: Create directory structure
+    #  win_file:
+    #   path: C:\Temp
+    #   state: directory
+    #  when: shell_result['stdout'] == ""
+
+    #- name: Donwload python 2.7
+    #  win_package:
+    #   path: https://www.python.org/ftp/python/2.7.18/python-2.7.18.amd64.msi
+    #   product_id: '{A5F504DF-2ED9-4A2D-A2F3-9D2750DD42D6}'
+    #   arguments: /quiet PrependPath=1 CompileAll=1
+    #  when: shell_result['stdout'] == ""
+          
+    - name: Donwload python and install 3.7
+      win_package:
+       path: https://www.python.org/ftp/python/3.7.7/python-3.7.7-amd64.exe
+       product_id: {60776648-6B18-47AC-AAA3-0C0DCFC28F26}
+       arguments: /quiet PrependPath=1 CompileAll=1 InstallAllUsers=1
+      when: shell_result['stdout'] == ""
